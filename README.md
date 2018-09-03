@@ -19,7 +19,7 @@ public class UnitTest {
     }
 }
 ```
-2.对 add 进行单元测试，在 test 对应目录下创建 UnitTestTest，或者在 UnitTest 下 右键 -> Go To -> Test
+2.对 add 进行单元测试，在 test 对应目录下创建 UnitTestTest，或者在 UnitTest 下 右键 -> Go To -> Test
 ```java
 public class UnitTestTest {
 
@@ -38,7 +38,7 @@ public class UnitTestTest {
 
 }
 ```
-3.在 UnitTestTest 右键 -> Run "UnitTestTest", 执行结果如下
+3.在 UnitTestTest 右键 -> Run "UnitTestTest", 执行结果如下
 ```java
 Process finished with exit code 0
 ```
@@ -65,24 +65,24 @@ Process finished with exit code 0
 
 ![单元测试报告](images/unit2.png)
 
-## Junit4 使用介绍
+## Junit4 使用介绍
 
 [junit4 wiki](https://github.com/junit-team/junit4/wiki)
 
 [junit4 javadoc](https://junit.org/junit4/javadoc/latest/)
 
 ### 常用注解
-| 注解名 | 含义 | 执行次数 |
+| 注解名 | 含义 | 执行次数 |
 | ------ | ------ | ------ |
 | @Before | 方法之前执行 | 多次 |
 | @After | 方法之后执行 | 多次 |
-| @BeforeClass | 类所有方法执行前执行 | 一次 |
+| @BeforeClass | 类所有方法执行前执行 | 一次 |
 | @AfterClass | 类所有方法执行后执行 | 一次 |
 | @Ignore | 不执行此测试方法 | |
-| @Test | 表示是单元测试的方法 | |
+| @Test | 表示是单元测试的方法 | |
 
 #### @Test
-对于每一个单元测试方法，都会加一个 @Test 注解。
+对于每一个单元测试方法，都会加一个 @Test 注解。
 ```java
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
@@ -159,7 +159,7 @@ Mockito 的使用
 1. 验证方法调用
 2. 指定 mock 对象的某些方法的行为
 
-### 先看一个例子
+### 先看一个例子
 1.有 LoginPresenter 类
 ```java
 public class LoginPresenter {
@@ -214,4 +214,4 @@ spy与mock的唯一区别就是默认行为不一样：spy对象的方法默认�
 
 ## Junit Rule
 
-## 异步代码测试
+## 异步代码测试
