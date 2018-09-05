@@ -72,14 +72,17 @@ Process finished with exit code 0
 [junit4 javadoc](https://junit.org/junit4/javadoc/latest/)
 
 ### 常用注解
-| 注解名 | 含义 | 执行次数 |
-| ------ | ------ | ------ |
-| @Before | 方法之前执行 | 多次 |
-| @After | 方法之后执行 | 多次 |
-| @BeforeClass | 类所有方法执行前执行 | 一次 |
-| @AfterClass | 类所有方法执行后执行 | 一次 |
-| @Ignore | 不执行此测试方法 | |
-| @Test | 表示是单元测试的方法 | |
+| 注解名 | 含义 |
+| ------ | ------ |
+| @Test | 表示是测试方法 |
+| @Before | 每个测试方法前执行，可做初始化操作 |
+| @After | 每个测试方法后执行，可做释放资源操作 |
+| @BeforeClass | 在类中所有方法执行前执行，必须是 static |
+| @AfterClass | 在类中所有方法执行后执行，必须是 static |
+| @Ignore | 忽略的测试方法 |
+| @Parameters | 指定测试类类的测试数据集合|
+| @Rule | 重新制定测试类中方法的行为 |
+| @FixMethodOrder | 指定测试类中方法的顺序 |
 
 #### @Test
 对于每一个单元测试方法，都会加一个 @Test 注解。
@@ -120,33 +123,59 @@ public @interface Test {
 ```
 
 ### 常用方法
-#### assertEquals
-* assertEquals(expected, actual)
-验证expected的值跟actual是一样的，如果是一样的话，测试通过，不然的话，测试失败。如果传入的是object，那么这里的对比用的是equals()
-
-* assertEquals(expected, actual, tolerance)
-这里传入的expected和actual是float或double类型的，大家知道计算机表示浮点型数据都有一定的偏差，所以哪怕理论上他们是相等的，但是用计算机表示出来则可能不是，所以这里运行传入一个偏差值。如果两个数的差异在这个偏差值之内，则测试通过，否者测试失败。
-
-* assertTrue(boolean condition)
-验证contidion的值是true
-
-* assertNull(Object obj)
-验证obj的值是null
-
-* assertNotNull(Object obj)
-验证obj的值不是null
-
-* assertSame(expected, actual)
-验证expected和actual是同一个对象，即指向同一个对象
-
-* assertNotSame(expected, actual)
-验证expected和actual不是同一个对象，即指向不同的对象
-
-* fail()
-让测试方法失败
+| 方法名 | 方法描述 |
+| -- | -- |
+| assertEquals | 判断预期值与实际值相等 |
+| assertNotEquals | 判断预期值与实际值不相等 |
+| assertArrayEquals | 判断数组相等 |
+| assertNull | 判断为空 |
+| assertNotNull | 判断不为空 |
+| assertTrue |  判断为真 |
+| assertFalse | 判断为假 |
+| assertSame | 判断引用相同，相当于 “==“ |
+| assertNotSame | 判断引用不同，相当于 "!=" |
+| assertThat | 判断值是否满足条件 |
+| fail | 让测试方法失败 |
 
 注：上面的每一个方法，都有一个重载的方法，可以在前面加一个String类型的参数，表示如果验证失败的话，将用这个字符串作为失败的结果报告。
 比如：assertEquals("a and b not equals", "a", "b");
+
+
+#### AssertThat
+```java
+    public static <T> void assertThat(T actual, Matcher<? super T> matcher) {
+        assertThat("", actual, matcher);
+    }
+    public static <T> void assertThat(String reason, T actual,
+            Matcher<? super T> matcher) {
+        MatcherAssert.assertThat(reason, actual, matcher);
+    }
+```
+reason 为断言失败时的输出信息， actual 为断言的值，matcher 为断言的匹配器
+
+| 匹配器 | 说明 | 例子 |
+| --- | --- | --- |
+| is | 判断相等 | assertThat(1，is(1)) |
+| not | 判断不想等 | assertThat(1, not(1)) |
+| equalTo | 判断相等 | assertThat(1, equalTo(1)) |
+| equalToIgnoringCase | 判断字符串忽略大小写 | assertThat("Ab", equalToIgnoringCase("ab")) |
+| containsString | 包含字符串 | assertThat("ab", containsString"b")) |
+| startsWith | 以什么字符串开始 | assertThat("ab", startsWith("a")) |
+| endsWith | 以什么字符串结尾 | assertThat("ab", endsWith("b")) |
+| nullValue | 判断为 null | assertThat(null, nullValue()) |
+| notNullValue | 判断不为 null | assertThat(1, notNullValue()) |
+| greaterThan | 判断大于 | assertThat(1, greaterThan(0)) |
+| lessThan | 判断小于 | assertThat(1, lessThan(2)) |
+| greaterThanOrEqualTo | 大于或等于 | assertThat(1, greaterThanOrEqualTo(0)) |
+| lessThanOrEqualTo | 小于或等于 | assertThat(1, lessThanOrEqualTo(2)) |
+| closeTo | 判断浮点数在某一范围 | assertThat(1.0, closeTo(0.0, 2.0)) |
+| allOf | 相当于 && | assertThat(1, allOf(greaterThan(0), lessThan(2))) |
+| anyOf | 相当于 || | assertThat(1, anyOf(greaterThan(1), lessThan(2))) |
+| hasKey | Map 集合有 key 值 | assertThat(map, hasKey("key")) |
+| hasValue | Map 集合有 value 值 | assertThat(map, hasValue("value")) |
+| hasItem | 含有某元素 | assertThat(list, hasItem(element)) |
+
+
 
 
 ## [Mockito](https://site.mockito.org/)
@@ -196,22 +225,87 @@ public class LoginPresenter {
     }
 ```
 
-//TODO
-### mock
+### mock 数据
 如果不指定的话，一个mock对象的所有非void方法都将返回默认值：int、long类型方法将返回0，boolean方法将返回false，对象方法将返回null等等；而void方法将什么都不做。
+
+### mock 返回值
+| 方法名 | 方法描述 |
+| --- | --- | --- |
+| thenReturn | 设置要返回的值 |
+| thenThrow| 要抛出的异常 |
+| thenAnswer | 对结果进行拦截 |
+| doReturn | 提前设置要返回的值 |
+| doThrow | 设置抛出的异常 |
+| doAnswer | 对结果进行拦截 |
+| doCallRealMethod | 调用真实方法 |
+| doNothing | 什么都不做 |
+
+例子：
+```java
+when(model.getName()).thenReturn("thenReturn Name");
+
+doReturn("do return name").when(model).getName();
+```
+
 ### verify
-### doAnser().when()
-### doNothing
-### doThrow
-### doCallRealMethod
-### when().thenReturn()
-### spy
+| 方法名 | 方法描述 |
+| --- | --- |
+| after | 在给定的时间后进行验证 |
+| timeout | 验证方法执行是否超时 |
+| atLeast | 方法至少执行 n 次|
+| atMost | 方法最多执行 n 次 |
+| description | 验证失败时输出的内容 |
+| times | 验证调用方法的次数 |
+| never | 验证没有执行过，相当于 times(0) |
+| only | 验证方法只被执行一次，类似 times(1) |
+
+### any 参数匹配器
+| 方法名 | 方法描述 |
+| --- | --- | 
+| anyObject | 匹配任何对象 |
+| any(Class<T> type) | 匹配任何对象 |
+| any | 匹配任何对象 |
+| anyBoolean | 匹配任何非空 boolean |
+| anyByte | 匹配任何非空 Byte |
+| anyCollection | 匹配任何非空 Collection |
+| anyDouble | 匹配任何非空 Double |
+| anyFloat | 匹配任何非空 Float |
+| anyInt | 匹配任何非空 Int |
+| anyList | 撇配任何非空 List |
+| anyLong | 匹配任何非空 Long |
+| anyMap | 匹配任何非空 Map |
+| anyString | 匹配任何非空 String |
+| contains | 参数包含给定的字符串 |
+| argsThat | 创建自定义的参数匹配模式 |
+
+### spy 实现调用真是对象的实现
 spy与mock的唯一区别就是默认行为不一样：spy对象的方法默认调用真实的逻辑，mock对象的方法默认什么都不做，或直接返回默认值。
 
+### inOrder 验证执行顺序
+
+### @InjectMocks 自动将模拟对象注入到被测试对象
 
 ## [Robolectric](http://robolectric.org/)
 
+如果在设备上测试是很慢的，因为编译、安装、运行 app 需要花费几分钟或者更多的时间。
 
-## Junit Rule
+RobolectRict 是一个可以运行安卓代码的单元测试框架，测试在你的电脑上运行只需要几秒钟。
 
-## 异步代码测试
+它通过实现一套JVM能运行的Android代码，从而做到脱离Android运行环境进行测试。
+
+### 日志输出
+### 验证 Activity 跳转
+### 验证 Toast
+### 验证 Dialog
+### 验证 CheckBox 状态
+### 验证 Fragment
+### 访问资源文件
+### Activity 生命周期
+### 验证 BroadcastReceiver
+### Service 验证
+
+### 网络接口测试
+### RxJava 测试
+
+
+
