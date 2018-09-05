@@ -82,7 +82,7 @@ Process finished with exit code 0
 | @Ignore | 忽略的测试方法 |
 | @Parameters | 指定测试类类的测试数据集合|
 | @Rule | 重新制定测试类中方法的行为 |
-| @FixMethodOrder | 指定测试类中方法的顺序 |
+| @FixMethodOrder | 指定测试类中方法的顺序 |
 
 #### @Test
 对于每一个单元测试方法，都会加一个 @Test 注解。
@@ -159,7 +159,7 @@ reason 为断言失败时的输出信息， actual 为断言的值，matcher 为
 | not | 判断不想等 | assertThat(1, not(1)) |
 | equalTo | 判断相等 | assertThat(1, equalTo(1)) |
 | equalToIgnoringCase | 判断字符串忽略大小写 | assertThat("Ab", equalToIgnoringCase("ab")) |
-| containsString | 包含字符串 | assertThat("ab", containsString"b")) |
+| containsString | 包含字符串 | assertThat("ab", containsString"b")) |
 | startsWith | 以什么字符串开始 | assertThat("ab", startsWith("a")) |
 | endsWith | 以什么字符串结尾 | assertThat("ab", endsWith("b")) |
 | nullValue | 判断为 null | assertThat(null, nullValue()) |
@@ -229,6 +229,7 @@ public class LoginPresenter {
 如果不指定的话，一个mock对象的所有非void方法都将返回默认值：int、long类型方法将返回0，boolean方法将返回false，对象方法将返回null等等；而void方法将什么都不做。
 
 ### mock 返回值
+
 | 方法名 | 方法描述 |
 | --- | --- | --- |
 | thenReturn | 设置要返回的值 |
@@ -251,9 +252,9 @@ doReturn("do return name").when(model).getName();
 | 方法名 | 方法描述 |
 | --- | --- |
 | after | 在给定的时间后进行验证 |
-| timeout | 验证方法执行是否超时 |
+| timeout | 验证方法执行是否超时 |
 | atLeast | 方法至少执行 n 次|
-| atMost | 方法最多执行 n 次 |
+| atMost | 方法最多执行 n 次 |
 | description | 验证失败时输出的内容 |
 | times | 验证调用方法的次数 |
 | never | 验证没有执行过，相当于 times(0) |
@@ -271,7 +272,7 @@ doReturn("do return name").when(model).getName();
 | anyDouble | 匹配任何非空 Double |
 | anyFloat | 匹配任何非空 Float |
 | anyInt | 匹配任何非空 Int |
-| anyList | 撇配任何非空 List |
+| anyList | 匹配任何非空 List |
 | anyLong | 匹配任何非空 Long |
 | anyMap | 匹配任何非空 Map |
 | anyString | 匹配任何非空 String |
@@ -305,7 +306,11 @@ RobolectRict 是一个可以运行安卓代码的单元测试框架，测试在�
 ### Service 验证
 
 ### 网络接口测试
-### RxJava 测试
+* 拦截器 mock
+* server mock
+* 正常请求测试
 
+### RxJava 测试
+* demo：计时器
 
 
